@@ -53,6 +53,8 @@ public class HttpServer {
         if(request.size()>0) {
             UrlStr = request.get(0).split(" ")[1];
         }
+
+        if(UrlStr.equals("/")){UrlStr="/index.js";}
         if(FilenameUtils.isExtension(UrlStr, extensions)) {
             outputLine = getResouce(UrlStr);
             out.println(outputLine);
