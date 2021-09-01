@@ -53,22 +53,38 @@ public class HttpServer {
         if(request.size()>0) {
             UrlStr = request.get(0).split(" ")[1];
         }
-
         if(UrlStr.equals("/")){UrlStr="/index.js";}
         if(FilenameUtils.isExtension(UrlStr, extensions)) {
             outputLine = getResouce(UrlStr);
             out.println(outputLine);
-            out.close();
-        }
-        else {
+        }else if (!FilenameUtils.getExtension(UrlStr).equals("")){
             outimage(UrlStr,clientSocket.getOutputStream());
+        }else {
+            outputLine =errorResponse(UrlStr);
+            System.out.println(outputLine);
+            out.println(outputLine);
         }
+        out.close();
         clientSocket.close();
         in.close();
-
     }
 
-    public void outimage(String UrlStr, OutputStream output){
+    public String errorResponse(String UrlStr) throws IOException {
+        String val = "public_html/Error404.html";
+        File archivo = new File(val);
+        BufferedReader in = new BufferedReader(new FileReader(archivo));
+        String output = "HTTP/1.1 200 OK\r\nContent - Type: text/html \r\n\r\n", str,res;
+        while ((str = in.readLine()) != null) {
+            if (str.contains("404 Not Found")){
+                output+=str+"\n <br> <b><big><FONT COLOR=\"white\" size=\"500\"> The requested URL "+UrlStr+" not found  on this server</FONT></big></b>\n";
+            }else {
+                output+=str+"\n";
+            }
+        }
+        return output;
+    }
+
+    public String outimage(String UrlStr, OutputStream output) {
         File file = new File("public_html/"+UrlStr);
         String extension = FilenameUtils.getExtension(UrlStr);
         try {
@@ -81,6 +97,7 @@ public class HttpServer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return extension;
     }
 
     public String getResouce(String resourceURL) throws IOException {
