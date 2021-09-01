@@ -49,7 +49,10 @@ public class HttpServer {
                 break;
             }
         }
-        String UrlStr = request.get(0).split(" ")[1];
+        String UrlStr="";
+        if(request.size()>0) {
+            UrlStr = request.get(0).split(" ")[1];
+        }
         if(FilenameUtils.isExtension(UrlStr, extensions)) {
             outputLine = getResouce(UrlStr);
             out.println(outputLine);
