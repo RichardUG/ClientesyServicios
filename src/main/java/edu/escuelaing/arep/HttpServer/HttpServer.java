@@ -7,6 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import edu.escuelaing.arep.DBConnection.DBConnection;
 import org.apache.commons.io.FilenameUtils;
 
 public class HttpServer {
@@ -14,6 +15,7 @@ public class HttpServer {
     private static final HttpServer _instance = new HttpServer();
     public static HttpServer getInstance(){return _instance;}
     public HttpServer(){}
+    private DBConnection dbConnection;
     public void start(String[] args) throws IOException{
         ServerSocket serverSocket = null;
         try {
