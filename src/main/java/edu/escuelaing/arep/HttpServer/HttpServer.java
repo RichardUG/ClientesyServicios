@@ -52,14 +52,16 @@ public class HttpServer {
             }
         }
         String UrlStr="";
+        ;
         if(request.size()>0) {
             UrlStr = request.get(0).split(" ")[1];
         }
+        File archivo = new File("public_html/"+UrlStr);
         if(UrlStr.equals("/")){UrlStr="/index.js";}
-        if(FilenameUtils.isExtension(UrlStr, extensions)) {
+        if(FilenameUtils.isExtension(UrlStr, extensions) && archivo.exists()) {
             outputLine = getResouce(UrlStr);
             out.println(outputLine);
-        }else if (!FilenameUtils.getExtension(UrlStr).equals("")){
+        }else if (!FilenameUtils.getExtension(UrlStr).equals("") && archivo.exists()){
             outimage(UrlStr,clientSocket.getOutputStream());
         }else {
             outputLine =errorResponse(UrlStr);
